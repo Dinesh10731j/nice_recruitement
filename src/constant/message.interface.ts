@@ -32,12 +32,10 @@ export const Message = {
   // Validation
   INVALID_REQUEST: "Invalid request data",
   MISSING_FIELDS: "Required fields are missing",
-  CAPTCHA_REQUIRED: "Captcha token is required",
-  CAPTCHA_FAILED: "Captcha verification failed",
 
   // Recruiting
-  FLIGHT_BOOKing_SUCCESS: "Interview scheduled successfully",
-  BOOKING_NOT_FOUND: "Interview not found",
+  INTERVIEWS_SCHEDULE_SUCCESS: "Interview scheduled successfully",
+  INTREVIEWS_NOT_FOUND: "Interview not found",
   BOOKING_CANCELLED: "Interview has been cancelled",
   NEWSLETTER_SUBSCRIBED: "Subscribed to job alerts",
   NEWSLETTER_SENT: "Job alert sent"

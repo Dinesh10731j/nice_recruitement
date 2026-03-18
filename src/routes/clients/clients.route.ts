@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { ClientsController } from "../../controller/clients/clients.controller";
 import { VerifyToken } from "../../middleware/authentication";
-import { requireRole } from "../../middleware/role";
+import { isAdmin } from "../../middleware/role";
 import { upload } from "../../middleware/upload";
 
 const router = Router();
@@ -9,7 +9,7 @@ const router = Router();
 router.post(
   "/",
   VerifyToken.authenticate,
-  requireRole(["admin"]),
+ isAdmin,
   upload.single("logo"),
   ClientsController.create
 );

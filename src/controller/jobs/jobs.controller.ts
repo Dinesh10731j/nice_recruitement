@@ -4,6 +4,7 @@ import { Message } from "../../constant/message.interface";
 import { JobsService } from "../../service/jobs/jobs.service";
 import { JobsRepository } from "../../repository/jobs/jobs.repository";
 import { uploadBufferToCloudinary } from "../../utils/cloudinaryUpload";
+import { setCache } from "../../utils/helpers/redis_helper";
 
 const repo = new JobsRepository();
 const service = new JobsService(repo);
@@ -35,16 +36,26 @@ export class JobsController {
   }
 
   static async findAll(_req: Request, res: Response) {
-    try {
-      const data = await service.findAll();
-      return res.status(HTTP_STATUS.OK).json({ message: Message.FETCHED, data });
-    } catch (err) {
-      return res
-        .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-        .json({ message: Message.INTERNAL_SERVER_ERROR });
-    }
-  }
+  try {
+    const cacheKey = "jobs:all";
 
+  
+    const data = await service.findAll();
+
+  
+    await setCache(cacheKey, JSON.stringify(data));
+
+    return res.status(HTTP_STATUS.OK).json({
+      message: Message.FETCHED,
+      data,
+      isCached: false, // ✅ data came from DB
+    });
+  } catch (err) {
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .json({ message: Message.INTERNAL_SERVER_ERROR });
+  }
+}
   static async findById(req: Request, res: Response) {
     const id = getIdParam(req, res);
     if (!id) return;

@@ -41,7 +41,7 @@ export class NewsLetterController {
       await delCache("newsLetter:all");
       return res
         .status(result.status)
-        .json({ message: Message.NEWSLETTER_SUBSCRIBED, data: result.data });
+        .json({ message: Message.NEWSLETTER_SUBSCRIBED });
     } catch (err: unknown) {
       return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
         message: Message.INTERNAL_SERVER_ERROR,

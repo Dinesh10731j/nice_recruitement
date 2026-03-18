@@ -3,47 +3,20 @@ import { HTTP_STATUS } from "../constant/statusCode.interface";
 import { Message } from "../constant/message.interface";
 import type { UserPayload } from "../dto/interface";
 
-type AllowedRole = "admin";
 
-export const requireAdminOrSuperAdmin = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void => {
+
+
+
+export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
   const user = (req as Request & { user?: UserPayload }).user;
 
   if (!user) {
-    res.status(HTTP_STATUS.UNAUTHORIZED).json({ message: Message.UNAUTHORIZED });
-    return;
+    return res.status(HTTP_STATUS.UNAUTHORIZED).json({ message: Message.ACCESS_TOKEN_MISSING });
   }
 
-  const role = user.role;
-  if (role !== "admin") {
-    res.status(HTTP_STATUS.FORBIDDEN).json({ message: Message.FORBIDDEN_ROLE });
-    return;
+  if (user.role !== "admin") {
+    return res.status(HTTP_STATUS.FORBIDDEN).json({ message: "You do not have permission to access this resource." });
   }
 
   next();
-};
-
-export const requireRole = (roles: AllowedRole[]) => {
-  return (req: Request, res: Response, next: NextFunction): void => {
-    const user = (req as Request & { user?: UserPayload }).user;
-
-    if (!user) {
-      res
-        .status(HTTP_STATUS.UNAUTHORIZED)
-        .json({ message: Message.UNAUTHORIZED });
-      return;
-    }
-
-    if (!roles.includes(user.role as AllowedRole)) {
-      res
-        .status(HTTP_STATUS.FORBIDDEN)
-        .json({ message: Message.FORBIDDEN_ROLE });
-      return;
-    }
-
-    next();
-  };
 };

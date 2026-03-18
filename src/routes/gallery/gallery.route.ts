@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { GalleryController } from "../../controller/gallery/gallery.controller";
 import { VerifyToken } from "../../middleware/authentication";
-import { requireRole } from "../../middleware/role";
+import { isAdmin } from "../../middleware/role";
 import { upload } from "../../middleware/upload";
 
 const router = Router();
@@ -9,7 +9,7 @@ const router = Router();
 router.post(
   "/create",
   VerifyToken.authenticate,
-  requireRole(["admin"]),
+isAdmin,
   upload.array("image",10),
   GalleryController.create
 );

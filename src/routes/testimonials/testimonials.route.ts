@@ -1,14 +1,14 @@
 import { Router } from "express";
 import { TestimonialsController } from "../../controller/testimonials/testimonials.controller";
 import { VerifyToken } from "../../middleware/authentication";
-import { requireRole } from "../../middleware/role";
+import { isAdmin } from "../../middleware/role";
 
 const router = Router();
 
 router.post(
   "/",
   VerifyToken.authenticate,
-  requireRole(["admin"]),
+  isAdmin,
   TestimonialsController.create
 );
 router.get("/", TestimonialsController.findAll);
