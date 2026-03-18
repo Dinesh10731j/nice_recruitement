@@ -1,0 +1,94 @@
+import Redis, { Redis as RedisClient } from "ioredis";
+import { envConfig } from "./env.config";
+import chalk from "chalk";
+
+const { REDIS_URL } = envConfig;
+
+if (!REDIS_URL) {
+  throw new Error("REDIS_URL is not defined in your environment variables!");
+}
+
+/**
+ * RedisService is a type-safe wrapper around ioredis
+ */
+export class RedisService {
+  private client: RedisClient;
+
+  constructor(url: string) {
+    this.client = new Redis(url, { maxRetriesPerRequest: null });
+
+    this.client.on("connect", () => {
+      if (process.env.NODE_ENV !== "test" && !process.env.SKIP_REDIS) {
+        console.log(chalk.green("Redis connected"));
+      }
+    });
+
+    this.client.on("error", (err: unknown) => {
+      if (process.env.NODE_ENV !== "test" && !process.env.SKIP_REDIS) {
+        console.error(chalk.red("Redis connection error:"), err);
+      }
+      // Do not throw here; allow app to continue running even if Redis drops.
+    });
+  }
+
+  /**
+   * Get a value from Redis
+   * @param key string
+   * @returns string | null
+   */
+  async get(key: string): Promise<string | null> {
+    return this.client.get(key);
+  }
+
+  /**
+   * Set a value in Redis
+   * @param key string
+   * @param value string
+   * @param ttl optional time to live in seconds
+   */
+  async set(key: string, value: string, ttl?: number): Promise<"OK"> {
+    if (ttl) {
+      return this.client.set(key, value, "EX", ttl);
+    }
+    return this.client.set(key, value);
+  }
+
+  /**
+   * Delete a key from Redis
+   * @param key string
+   */
+  async del(key: string): Promise<number> {
+    return this.client.del(key);
+  }
+
+  /**
+   * Access the raw Redis client if needed
+   */
+  getRawClient(): RedisClient {
+    return this.client;
+  }
+
+  /**
+   * Gracefully disconnect
+   */
+  async disconnect(): Promise<void> {
+    await this.client.quit();
+  }
+}
+
+// Export a singleton instance for app-wide use
+type RedisServiceLike = Pick<
+  RedisService,
+  "get" | "set" | "del" | "getRawClient" | "disconnect"
+>;
+
+const noopRedisService: RedisServiceLike = {
+  get: async () => null,
+  set: async () => "OK" as const,
+  del: async () => 0,
+  getRawClient: () => null as any,
+  disconnect: async () => {},
+};
+
+export const redisService: RedisServiceLike =
+  process.env.SKIP_REDIS === "true" ? noopRedisService : new RedisService(REDIS_URL);
