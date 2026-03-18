@@ -7,13 +7,13 @@ import { upload } from "../../middleware/upload";
 const router = Router();
 
 router.post(
-  "/",
+  "/create",
   VerifyToken.authenticate,
 isAdmin,
   upload.single("image"),
   BlogsController.create
 );
-router.get("/", BlogsController.findAll);
+router.get("/find-all", BlogsController.findAll);
 router.get("/:id", BlogsController.findById);
 router.patch("/:id", upload.single("image"), BlogsController.update);
 router.delete("/:id", BlogsController.remove);

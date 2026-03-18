@@ -7,7 +7,7 @@ import { upload } from "../../middleware/upload";
 const router = Router();
 
 router.post(
-  "/",
+  "/create",
   VerifyToken.authenticate,
  isAdmin,
   upload.single("logo"),

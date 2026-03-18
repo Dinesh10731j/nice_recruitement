@@ -5,6 +5,7 @@ import { BlogsService } from "../../service/blogs/blogs.service";
 import { BlogsRepository } from "../../repository/blogs/blogs.repository";
 import { uploadBufferToCloudinary } from "../../utils/cloudinaryUpload";
 
+
 const repo = new BlogsRepository();
 const service = new BlogsService(repo);
 
@@ -20,6 +21,8 @@ const getIdParam = (req: Request, res: Response): string | null => {
 export class BlogsController {
   static async create(req: Request, res: Response) {
     try {
+
+  
       const payload = { ...req.body } as Record<string, unknown>;
       if (req.file?.buffer) {
         payload.coverImageUrl = await uploadBufferToCloudinary(req.file.buffer, "blogs");

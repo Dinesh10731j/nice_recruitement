@@ -4,7 +4,9 @@ import { Message } from "../../constant/message.interface";
 import { AdvertiseService } from "../../service/advertise/advertise.service";
 import { AdvertiseRepository } from "../../repository/advertise/advertise.repository";
 import { uploadBufferToCloudinary } from "../../utils/cloudinaryUpload";
-
+import { CreateAdvertiseDto } from "../../dto/advertise/advertise.dto";
+import { plainToInstance } from "class-transformer";
+import {validate} from "class-validator";
 const repo = new AdvertiseRepository();
 const service = new AdvertiseService(repo);
 
@@ -20,6 +22,15 @@ const getIdParam = (req: Request, res: Response): string | null => {
 export class AdvertiseController {
   static async create(req: Request, res: Response) {
     try {
+      const dto = plainToInstance(CreateAdvertiseDto,req.body);
+      // ✅ Validate DTO
+          const errors = await validate(dto);
+          if (errors.length > 0) {
+            return res.status(HTTP_STATUS.BAD_REQUEST).json({
+              message: "Validation failed",
+              errors,
+            });
+          }
       const payload = { ...req.body } as Record<string, unknown>;
       if (req.file?.buffer) {
         payload.imageUrl = await uploadBufferToCloudinary(req.file.buffer, "advertise");

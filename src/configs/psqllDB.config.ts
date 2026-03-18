@@ -26,7 +26,7 @@ export const AppDataSource = new DataSource({
 //   logging: false,
 
   // Dynamic entity path
-  entities: [path.join(__dirname, `./entity/**/*.${entityExt}`)],
+entities: [path.join(__dirname, `../**/*.entity.${entityExt}`)],
 
 //  migrations: [],  //Optional: Path to your migration scripts (database schema changes).
 
