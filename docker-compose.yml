@@ -12,7 +12,7 @@ services:
       - DB_PORT=5432
       - DB_USERNAME=postgres
       - DB_PASSWORD=postgres
-      - DB_NAME=mydb
+      - DB_NAME= naes_recuirement
     depends_on:
       - db
     volumes:
