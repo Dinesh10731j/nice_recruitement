@@ -14,7 +14,6 @@ router.post(
   JobsController.create
 );
 router.get("/find-all", JobsController.findAll);
-router.get("/get-all", JobsController.findAll);
 router.get("/:id", JobsController.findById);
 router.patch("/update/:id", upload.single("image"), JobsController.update);
 router.delete("/remove/:id", JobsController.remove);

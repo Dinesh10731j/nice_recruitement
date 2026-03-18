@@ -3,10 +3,10 @@ import { ContactController } from "../../controller/contact/contact.controller";
 
 const router = Router();
 
-router.post("/", ContactController.create);
-router.get("/", ContactController.findAll);
+router.post("/create", ContactController.create);
+router.get("/find-all", ContactController.findAll);
 router.get("/:id", ContactController.findById);
-router.patch("/:id", ContactController.update);
-router.delete("/:id", ContactController.remove);
+router.patch("/update/:id", ContactController.update);
+router.delete("/remove/:id", ContactController.remove);
 
 export default router;
