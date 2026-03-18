@@ -49,7 +49,7 @@ export const startEmailWorker = (): Worker => {
       });
 
       if (process.env.NODE_ENV !== "test") {
-        console.log(chalk.blue(`Welcome email sent to ${email}`));
+        console.log(chalk.blue(`Welcome email sent`));
       }
     },
     { connection }

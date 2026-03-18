@@ -12,16 +12,22 @@ import { NewsLetterSubscriber } from "../entity/news-letter/news-letter-subscrib
 import { UserActivity } from "../entity/activity/user-activity.entity";
 import { Service } from "../entity/service/service.entity";
 import { Testimonial } from "../entity/testimonials/testimonials.entity";
+import { envConfig } from "./env.config";
+const { DB_URL } = envConfig
 
 export const AppDataSource = new DataSource({
-   type: "postgres",
-  host: "localhost",
-  port: 5433,
-  username: "postgres",
-  password: "eagle_heli12",
-  database: "naes_recuirement",
+  type: "postgres",
+
+  url: String(DB_URL),
+
+  // ⚠️ REQUIRED for cloud DB (Neon / Render / Supabase)
+  ssl: {
+    rejectUnauthorized: false,
+  },
+
   synchronize: true,
   logging: false,
+
   entities: [
     User,
     Blog,
@@ -36,6 +42,7 @@ export const AppDataSource = new DataSource({
     Service,
     Testimonial,
   ],
+
   migrations: [],
   subscribers: [],
 });
