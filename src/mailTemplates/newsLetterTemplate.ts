@@ -1,9 +1,9 @@
+
 export type NewsLetterTemplateInput = {
   recruitedCount: number;
   destinationCountries: string[];
   companyName?: string;
 };
-
 export const manpowerNewsletterTemplate = (
   input: NewsLetterTemplateInput
 ): string => {

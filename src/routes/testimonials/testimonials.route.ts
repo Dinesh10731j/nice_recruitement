@@ -6,7 +6,7 @@ import { isAdmin } from "../../middleware/role";
 const router = Router();
 
 router.post(
-  "/",
+  "/create",
   VerifyToken.authenticate,
   isAdmin,
   TestimonialsController.create

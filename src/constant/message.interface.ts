@@ -36,7 +36,7 @@ export const Message = {
   // Recruiting
   INTERVIEWS_SCHEDULE_SUCCESS: "Interview scheduled successfully",
   INTREVIEWS_NOT_FOUND: "Interview not found",
-  BOOKING_CANCELLED: "Interview has been cancelled",
+  INTREVIEW_CANCELLED: "Interview has been cancelled",
   NEWSLETTER_SUBSCRIBED: "Subscribed to job alerts",
   NEWSLETTER_SENT: "Job alert sent"
 };

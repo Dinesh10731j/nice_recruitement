@@ -8,7 +8,7 @@ import { upload } from "../../middleware/upload";
 const router = Router();
 
 router.post(
-  "/",
+  "/create",
   VerifyToken.authenticate,
   isAdmin,
   upload.single("image"),
@@ -17,7 +17,7 @@ router.post(
 router.get("/", AdvertiseController.findAll);
 router.get("/:id", AdvertiseController.findById);
 router.patch(
-  "/:id",
+  "update/:id",
   VerifyToken.authenticate,
  isAdmin,
   upload.single("image"),
